@@ -10,7 +10,6 @@ let router = require("express").Router();
             res.json(err);
         });
     });
-
     router.post("/api/workouts", async (req, res)=> {
         try{
             const response = await db.Workout.create({type: "workout"})
@@ -20,14 +19,12 @@ let router = require("express").Router();
             console.log("error occurred creating a workout: ", err)
         }
     })
-
     router.put("/api/workouts/:id", ({body, params}, res) => {
         const workoutId = params.id;
         let savedExercises = [];
 
         db.Workout.find({_id: workoutId})
             .then(dbWorkout => {
-                // console.log(dbWorkout)
                 savedExercises = dbWorkout[0].exercises;
                 res.json(dbWorkout[0].exercises);
                 let allExercises = [...savedExercises, body]
@@ -37,18 +34,14 @@ let router = require("express").Router();
             .catch(err => {
                 res.json(err);
             });
-
         function updateWorkout(exercises){
             db.Workout.findByIdAndUpdate(workoutId, {exercises: exercises}, function(err, doc){
             if(err){
                 console.log(err)
             }
-
             })
-        }
-            
+        }      
     })
-
     router.get("/api/workouts/range", (req, res) => {
         db.Workout.find({})
         .then(workout => {
@@ -58,6 +51,5 @@ let router = require("express").Router();
             res.json(err);
         });
     }); 
-
     module.exports= router
     
